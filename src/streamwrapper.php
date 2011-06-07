@@ -98,6 +98,10 @@ namespace TheSeer\Tools {
          self::$properties['protocol'] = $proto;
       }
 
+      public static function setPreProcessor(PreProcessor $proc) {
+         self::$properties['processor'] = $proc;
+      }
+
       public static function setCachePath($path) {
          self::$properties['cache'] = $path;
       }
@@ -116,7 +120,11 @@ namespace TheSeer\Tools {
                return true;
             }
          }
-         $proc = new PreProcessor();
+         if (!self::$properties['processor']) {
+            $proc = new PreProcessor();
+         } else {
+            $proc = self::$properties['processor'];
+         }
          $this->source = $proc->processFile($path);
          $this->sourceLen = strlen($this->source);
          if (isset(self::$properties['cache'])) {
